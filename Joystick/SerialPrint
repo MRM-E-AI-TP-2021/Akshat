@@ -1,0 +1,22 @@
+const int switchpin = 8; 
+const int xaxis = 0; 
+const int yaxis = 1; 
+
+void setup() {
+  pinMode(switch, INPUT);
+  digitalWrite(switch, HIGH);
+  Serial.begin(9600);
+}
+
+void loop() {
+  Serial.print("Switch:  ");
+  Serial.print(digitalRead(switchpin));
+  Serial.print(" | ");
+  Serial.print("xaxis: ");
+  Serial.print(analogRead(xaxis));
+  Serial.print(" | ");
+  Serial.print("yaxis: ");
+  Serial.print(analogRead(yaxis));
+  Serial.println(" | ");
+  delay(200);
+}
