@@ -1,0 +1,84 @@
+int switchpin=2;
+int xpin=A0;
+int ypin=A1;
+int FrontRight=11;
+int FrontLeft=10;
+int BackRight=9;
+int BackLeft=6;
+int xmapped,L,R,x,y;
+const int vmax=255;
+void setup() { 
+ pinMode(switchpin,INPUT);
+ pinMode(xpin,INPUT);
+ pinMode(ypin,INPUT);
+ pinMode(FrontRight,OUTPUT);
+ pinMode(FrontLeft,OUTPUT);
+ pinMode(BackRight,OUTPUT);
+ pinMode(BackLeft,OUTPUT);
+ Serial.begin(9600);
+}
+void loop() {
+digitalWrite(switchpin,HIGH);
+x=analogRead(xpin);
+y=analogRead(ypin);
+
+
+if((y==512 || x==512))//origin
+{ 
+  R=0;
+  L=0;
+}
+
+/*
+**************************************************
+To define all 4 quadrants
+**************************************************
+*/
+
+else if(y>512)
+{
+  R=map(y,512,1023,0,255);
+  L=map(y,512,1023,0,255);
+}
+else if(y<512)
+{
+  R=map(y,512,0,0,-255);
+  L=map(y,512,0,0,-255);
+}
+
+ 
+
+if(x>512) 
+{
+  xmapped=map(x,512,1023,0,255);
+  R=R+xmapped;
+  L=L-xmapped;
+}
+else if(x<512)
+{ 
+  xmapped=map(x,512,0,0,255);
+  R=R+xmapped;
+  L=L-xmapped;
+}
+if(R<0)
+{ 
+  analogWrite(BackRight,abs(R));
+}
+else
+{
+  analogWrite(FrontRight,R);
+}
+if(L<0)
+{
+ analogWrite(BackLeft,abs(L));
+}
+else
+ analogWrite(FrontLeft,L);
+
+ Serial.print('The xAxis: ');
+ Serial.print(x);
+ 
+ Serial.print('The yAxis: ');
+ Serial.print(y);
+ 
+}
