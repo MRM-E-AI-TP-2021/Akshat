@@ -1,0 +1,127 @@
+int x = A0;
+int y = A1;
+int fleft = 6, fright = 9 , bleft = 5 , bright = 3;
+long threshold = 100;
+long xval, yval , angle = 0 , hyp;
+void setup() {
+  pinMode(x, INPUT);
+  pinMode(y, INPUT);
+  pinMode(fleft, OUTPUT);
+  pinMode(fright, OUTPUT);
+  pinMode(bleft, OUTPUT);
+  pinMode(bright, OUTPUT);
+  Serial.begin(9600);
+}
+void forward()
+{
+  long value = abs(yval / 2) - 1;
+  analogWrite(fleft, value);
+  analogWrite(fright, value);
+  digitalWrite(bleft, LOW);
+  digitalWrite(bright, LOW);
+  Serial.println(value);
+}
+void left()
+{
+  long value = abs(yval / 2) - 1;
+  analogWrite(fleft, value / 10);
+  analogWrite(fright, value);
+  digitalWrite(bleft, LOW);
+  digitalWrite(bright, LOW);
+  Serial.println(value);
+}
+void right()
+{
+  long value = abs(yval / 2) - 1;
+  analogWrite(fleft, value);
+  analogWrite(fright, value / 10);
+  digitalWrite(bleft, LOW);
+  digitalWrite(bright, LOW);
+  Serial.println(value);
+}
+void hardleft()
+{
+  //reverse left side motors
+  long value = abs(xval / 2) - 1;
+  analogWrite(fleft, value / 10);
+  analogWrite(fright, value);
+  analogWrite(bleft, value / 10);
+  analogWrite(bright, value);
+  Serial.println(value);
+}
+void hardright()
+{
+  //reverse right side motors
+  long value = abs(xval / 2) - 1;
+  analogWrite(fleft, value);
+  analogWrite(fright, value / 10);
+  analogWrite(bleft, value);
+  analogWrite(bright, value / 10);
+  Serial.println(value);
+}
+void backright()
+{
+  long value = abs(yval / 2) ;
+  digitalWrite(fleft, LOW);
+  digitalWrite(fright, LOW);
+  analogWrite(bleft, value);
+  analogWrite(bright, value / 10);
+  Serial.println(value);
+}
+void backleft()
+{
+  long value = abs(yval / 2) ;
+  digitalWrite(fleft, LOW);
+  digitalWrite(fright, LOW);
+  analogWrite(bleft, value / 10);
+  analogWrite(bright, value);
+  Serial.println(value);
+}
+void reverse()
+{
+  long value = abs(yval / 2);
+  digitalWrite(fleft, LOW);
+  digitalWrite(fright, LOW);
+  analogWrite(bleft, value);
+  analogWrite(bright, value);
+  Serial.println(value);
+}
+void reset()
+{
+  digitalWrite(fleft, LOW);
+  digitalWrite(fright, LOW);
+  digitalWrite(bleft, LOW);
+  digitalWrite(bright, LOW);
+}
+void loop() {
+
+  xval = analogRead(x) - 512;
+  yval = analogRead(y) - 512;
+  angle  = round(180 + atan2(xval, yval) * 180 / 3.1415);
+  hyp = sqrt(xval * xval + yval * yval);
+
+  if (hyp > threshold)
+  {
+    if (angle < 20 || angle > 340)
+      forward();
+    else if ( angle < 70 && angle > 20 )
+      left();
+    else if ( angle < 340 && angle > 290 )
+      right();
+    else if (  angle < 100 && angle > 70 )
+      hardleft();
+    else if (  angle > 260 && angle < 290 )
+      hardright();
+    else if ( angle > 160 && angle < 200 )
+      reverse();
+    else if ( angle > 200 && angle < 260 )
+      backright();
+    else if ( angle > 100 && angle < 160 )
+      backleft();
+  }
+  else
+  {
+    reset();
+  }
+
+}
