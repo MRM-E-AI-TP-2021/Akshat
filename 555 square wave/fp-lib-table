@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name "555 timer")(type KiCad)(uri "C:/Users/akshat/Desktop/pcb/abcd/555 square wave/555 timer.pretty")(options "")(descr ""))
+)
